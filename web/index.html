@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>小红书下载器</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="logo">红</span>小红书下载器</div>
+    <div class="badge" id="identity">游客身份（免登录）</div>
+  </header>
+
+  <main>
+    <section class="card">
+      <textarea id="input" rows="4"
+        placeholder="把小红书 App「分享 → 复制链接」的整段内容粘贴到这里。支持一条或多条，一次下载。"></textarea>
+
+      <div class="row dir-row">
+        <span class="dir-label">保存到</span>
+        <span class="dir-path" id="saveDir" title="">…</span>
+        <button class="btn ghost small" id="btnChooseDir">更改</button>
+      </div>
+
+      <div class="row actions">
+        <button class="btn primary" id="btnStart">开始下载</button>
+        <button class="btn ghost" id="btnOpenFolder">打开文件夹</button>
+      </div>
+      <p class="tip">批量下载为防平台限制会自动放慢节奏（几秒一条）；失败的条目不影响其他条。</p>
+    </section>
+
+    <details class="card adv" id="adv">
+      <summary>高级 · 登录救援</summary>
+      <p class="tip">
+        平时无需登录。只有两种情况用得上：<br/>
+        ① 视频想要最高清晰度（游客态视频可能被平台限制为低清）；<br/>
+        ② 个别笔记被平台拦截或作者设置了可见范围。
+      </p>
+      <div class="row" id="qrRow">
+        <button class="btn primary" id="btnLoginWindow">扫码登录（推荐）</button>
+        <span class="tip">弹出小红书官方登录页，手机扫码后本软件自动记住，全程不用懂 Cookie。</span>
+      </div>
+      <div class="row">
+        <textarea id="cookieInput" rows="2" placeholder="备选：在浏览器登录小红书网页版后，按 F12 → 网络 → 任意请求 → 请求标头 → 复制 cookie: 后面的整段内容，粘贴到这里"></textarea>
+      </div>
+      <div class="row">
+        <button class="btn ghost small" id="btnSaveCookie">保存 Cookie</button>
+        <button class="btn ghost small" id="btnClearCookie">清除登录身份</button>
+        <span class="tip" id="cookieMsg"></span>
+      </div>
+    </details>
+
+    <section class="card tasks" id="tasksCard" hidden>
+      <div class="row summary">
+        <span id="taskSummary">…</span>
+        <span id="taskFolder" class="tip"></span>
+      </div>
+      <ul id="taskList"></ul>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

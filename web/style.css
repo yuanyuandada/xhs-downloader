@@ -1,0 +1,117 @@
+/* 小红书下载器 - 深色主题 */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #12141a;
+  --card: #1a1d26;
+  --line: #2a2e3a;
+  --text: #e8eaf0;
+  --muted: #9aa0ae;
+  --accent: #ff2442;
+  --accent-dim: #d91c37;
+  --ok: #35c26e;
+  --warn: #e8b339;
+  --err: #ff5d5d;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.6 "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  min-height: 100vh;
+}
+
+header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.logo {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--accent); color: #fff; font-size: 16px; font-weight: 700;
+}
+.badge {
+  margin-left: auto; font-size: 12.5px; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px;
+}
+.badge.on { color: var(--ok); border-color: var(--ok); }
+
+main { max-width: 860px; margin: 18px auto; padding: 0 16px; display: grid; gap: 14px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+textarea {
+  width: 100%; resize: vertical;
+  background: #12141a; color: var(--text);
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px; font: inherit;
+}
+textarea:focus { outline: none; border-color: var(--accent); }
+
+.row { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
+.dir-row { margin-top: 12px; }
+.dir-label { color: var(--muted); font-size: 13.5px; }
+.dir-path {
+  flex: 1; min-width: 0; color: var(--text); font-size: 13.5px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  direction: rtl; text-align: left;
+}
+
+.btn {
+  border: none; border-radius: 10px; cursor: pointer;
+  padding: 10px 22px; font: inherit; font-weight: 600;
+  transition: filter .15s, background .15s;
+}
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.primary:hover { background: var(--accent-dim); }
+.btn.primary:disabled { background: #5a2530; color: #b99aa0; cursor: not-allowed; }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+.btn.ghost:hover { border-color: var(--muted); }
+.btn.small { padding: 6px 14px; font-weight: 500; }
+
+.tip { color: var(--muted); font-size: 12.5px; margin-top: 10px; }
+
+.adv summary { cursor: pointer; font-weight: 600; user-select: none; }
+.adv summary::marker { color: var(--accent); }
+
+.tasks .summary { margin-top: 0; justify-content: space-between; font-weight: 600; }
+#taskList { list-style: none; margin-top: 8px; display: grid; gap: 10px; }
+#taskList li {
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+  display: grid; grid-template-columns: 1fr auto; gap: 2px 10px;
+}
+#taskList .name { font-weight: 600; }
+#taskList .folder { color: var(--muted); font-size: 13px; }
+#taskList .status { font-size: 13px; font-weight: 600; align-self: start; }
+#taskList .reason { grid-column: 1 / -1; color: var(--muted); font-size: 12.5px; }
+#taskList .hint { grid-column: 1 / -1; color: var(--warn); font-size: 12.5px; }
+
+.st-running { color: var(--warn); }
+.st-done { color: var(--ok); }
+.st-skip { color: var(--muted); }
+.st-failed { color: var(--err); }
+
+.progress {
+  grid-column: 1 / -1; height: 5px; border-radius: 3px;
+  background: var(--line); overflow: hidden; display: none;
+}
+.progress.on { display: block; }
+.progress i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 34px; transform: translateX(-50%) translateY(20px);
+  background: #262a35; color: var(--text); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 18px; font-size: 14px;
+  opacity: 0; pointer-events: none; transition: all .25s; max-width: 80vw;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.err { border-color: var(--err); }
+.toast.ok { border-color: var(--ok); }
