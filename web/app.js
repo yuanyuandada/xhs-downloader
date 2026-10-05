@@ -75,6 +75,20 @@ function applySettings(s) {
   badge.textContent = s.identity;
   badge.className = "badge" + (s.logged_in ? " on" : "");
   if (s.web_mode) $("#btnLoginWindow").disabled = true;
+  if (!s.disclaimer_agreed) showDisclaimer(true);
+}
+
+/* ---------- 免责声明 ---------- */
+function showDisclaimer(consentMode) {
+  const s = state.settings || {};
+  $("#disclaimerBody").textContent = s.disclaimer_text || "";
+  $("#disclaimerMask").hidden = false;
+  $("#btnAgree").hidden = !consentMode;
+  $("#btnDecline").hidden = !consentMode;
+  $("#btnDisclaimerClose").hidden = consentMode;
+  $("#disclaimerTitle").textContent = consentMode
+    ? "使用前请阅读 · 免责声明"
+    : "免责声明";
 }
 
 /* ---------- 解析预览 ---------- */
@@ -293,6 +307,23 @@ function stopLoginWatch() {
 async function bind() {
   const s = await apiCall("get_settings");
   if (s.ok) applySettings(s);
+
+  $("#btnDisclaimer").addEventListener("click", () => showDisclaimer(false));
+  $("#btnDisclaimerClose").addEventListener("click", () => {
+    $("#disclaimerMask").hidden = true;
+  });
+  $("#btnAgree").addEventListener("click", async () => {
+    const r = await apiCall("agree_disclaimer");
+    if (r.ok) {
+      $("#disclaimerMask").hidden = true;
+      toast("感谢确认，开始使用吧", "ok");
+    }
+  });
+  $("#btnDecline").addEventListener("click", async () => {
+    const r = await apiCall("exit_app");
+    if (r.ok && r.closed) return; // 桌面模式：窗口已关闭
+    toast("未同意免责声明，暂时无法使用", "err");
+  });
 
   $("#btnPreview").addEventListener("click", doPreview);
   $("#btnStart").addEventListener("click", startSelected);

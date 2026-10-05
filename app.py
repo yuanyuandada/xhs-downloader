@@ -18,6 +18,13 @@ from xhs_dl.link import extract_links
 
 log = logging.getLogger("app")
 
+DISCLAIMER_VERSION = 1
+DISCLAIMER_TEXT = """1. 本软件为免费的个人自用工具，按“现状”提供。开发者不对可用性、稳定性作任何保证；小红书平台改版或风控策略变化可能导致部分功能失效。
+2. 本软件与小红书官方没有任何隶属或合作关系。内容数据均来自平台公开页面，版权归原创作者所有。
+3. 通过本软件下载的内容仅供个人收藏、学习使用。严禁用于商业用途、二次发布、冒充原创或其他侵犯他人合法权益的行为，由此产生的一切责任由使用者本人承担。
+4. 请遵守《小红书用户协议》及相关法律法规，不得利用本软件进行批量抓取、绕过平台限制或其他滥用行为。
+5. 使用本软件即表示你已阅读并同意以上全部内容。"""
+
 
 def _setup_logging():
     handler = logging.FileHandler(st.LOG_PATH, encoding="utf-8")
@@ -48,7 +55,29 @@ class Api:
             "identity": "已登录救援身份" if client.has_login_cookie() else "游客身份（免登录）",
             "web_mode": self.web_mode,
             "data_dir": st.DATA_DIR,
+            "disclaimer_agreed": bool(
+                s.get("disclaimer_agreed")
+                and s.get("disclaimer_version") == DISCLAIMER_VERSION
+            ),
+            "disclaimer_text": DISCLAIMER_TEXT,
         }
+
+    def agree_disclaimer(self):
+        st.save_settings(
+            {"disclaimer_agreed": True, "disclaimer_version": DISCLAIMER_VERSION}
+        )
+        return {"ok": True}
+
+    def exit_app(self):
+        if self.web_mode:
+            return {"ok": True, "closed": False}
+        import webview
+
+        try:
+            webview.windows[0].destroy()
+        except Exception:
+            pass
+        return {"ok": True, "closed": True}
 
     def set_settings(self, save_dir=None):
         try:

@@ -139,6 +139,28 @@ textarea:focus { outline: none; border-color: var(--accent); }
 .previews .p-open:hover { color: var(--text); }
 .dlbar { margin-top: 12px; margin-bottom: 0; }
 
+.link-btn {
+  background: none; border: none; color: var(--muted); cursor: pointer;
+  font-size: 12.5px; text-decoration: underline; padding: 2px 4px;
+}
+.link-btn:hover { color: var(--text); }
+
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(6, 8, 12, .72);
+  display: flex; align-items: center; justify-content: center; z-index: 50;
+}
+.modal {
+  width: min(560px, 92vw); max-height: 80vh; display: flex; flex-direction: column;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  padding: 20px;
+}
+.modal h3 { font-size: 16px; margin-bottom: 10px; }
+.modal-body {
+  overflow-y: auto; color: var(--text); font-size: 13.5px; line-height: 1.8;
+  white-space: pre-wrap; padding-right: 6px;
+}
+.modal-actions { justify-content: flex-end; margin-top: 14px; }
+
 .toast {
   position: fixed; left: 50%; bottom: 34px; transform: translateX(-50%) translateY(20px);
   background: #262a35; color: var(--text); border: 1px solid var(--line);

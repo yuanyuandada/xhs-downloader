@@ -10,6 +10,7 @@
   <header>
     <div class="brand"><span class="logo">红</span>小红书下载器</div>
     <div class="badge" id="identity">游客身份（免登录）</div>
+    <button class="link-btn" id="btnDisclaimer">免责声明</button>
   </header>
 
   <main>
@@ -69,6 +70,19 @@
   </main>
 
   <div class="toast" id="toast"></div>
+
+  <div class="modal-mask" id="disclaimerMask" hidden>
+    <div class="modal">
+      <h3 id="disclaimerTitle">使用前请阅读 · 免责声明</h3>
+      <div class="modal-body" id="disclaimerBody"></div>
+      <div class="row modal-actions">
+        <button class="btn primary" id="btnAgree" hidden>同意并继续</button>
+        <button class="btn ghost" id="btnDecline" hidden>退出</button>
+        <button class="btn primary" id="btnDisclaimerClose" hidden>关闭</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
