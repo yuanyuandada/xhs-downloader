@@ -149,6 +149,8 @@ textarea:focus { outline: none; border-color: var(--accent); }
   position: fixed; inset: 0; background: rgba(6, 8, 12, .72);
   display: flex; align-items: center; justify-content: center; z-index: 50;
 }
+/* display:flex 会压过 HTML 的 hidden 属性，必须显式抵消 */
+.modal-mask[hidden] { display: none; }
 .modal {
   width: min(560px, 92vw); max-height: 80vh; display: flex; flex-direction: column;
   background: var(--card); border: 1px solid var(--line); border-radius: 14px;

@@ -3,7 +3,7 @@
 [Setup]
 AppId={{8E5F2C7A-9B3D-4E6A-A1C4-7D2B5F8E9A01}
 AppName=小红书下载器
-AppVersion=1.1.1
+AppVersion=1.1.2
 AppPublisher=个人自用工具
 DefaultDirName={userpf}\小红书下载器
 DisableProgramGroupPage=yes
