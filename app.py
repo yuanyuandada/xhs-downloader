@@ -12,6 +12,7 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from xhs_dl import client, settings as st
+from xhs_dl.client import XhsError
 from xhs_dl.downloader import DownloadManager
 from xhs_dl.link import extract_links
 
@@ -77,7 +78,78 @@ class Api:
         except OSError as exc:
             return {"ok": False, "error": str(exc)}
 
+    # ---------- 解析预览 ----------
+    def preview_links(self, text):
+        """解析粘贴的链接，返回每篇笔记的预览信息（不下载）。"""
+        if self.manager.is_running():
+            return {"ok": False, "error": "已有任务在进行中，等它跑完"}
+        try:
+            links = extract_links(text)
+        except ValueError as exc:
+            return {"ok": False, "error": str(exc)}
+        items = []
+        for i, ln in enumerate(links):
+            try:
+                note = client.fetch_note(ln["url"], ln["note_id"])
+                live = sum(1 for im in note["images"] if im["live_url"])
+                cover = note["images"][0]["token"] if note["images"] else ""
+                items.append(
+                    {
+                        "note_id": ln["note_id"],
+                        "url": ln["url"],
+                        "ok": True,
+                        "title": note["title"],
+                        "author": note["author"],
+                        "publish": note["publish"],
+                        "type": note["type"],
+                        "count": 1 if note["video"] else len(note["images"]),
+                        "live": live,
+                        "cover_token": cover,
+                    }
+                )
+            except XhsError as exc:
+                items.append(
+                    {"note_id": ln["note_id"], "url": ln["url"], "ok": False,
+                     "error": str(exc)}
+                )
+            if i < len(links) - 1:
+                time.sleep(1.0)  # 解析间隔，防风控
+        return {"ok": True, "items": items}
+
     # ---------- 下载 ----------
+    def start_selected(self, links):
+        if self.manager.is_running():
+            return {"ok": False, "error": "已有任务在进行中，等它跑完"}
+        clean = []
+        for ln in links or []:
+            if not isinstance(ln, dict):
+                continue
+            nid, url = str(ln.get("note_id") or ""), str(ln.get("url") or "")
+            if nid and url:
+                clean.append({"note_id": nid, "url": url})
+        if not clean:
+            return {"ok": False, "error": "没有勾选任何笔记"}
+        s = st.load_settings()
+        save_dir = s["save_dir"]
+        try:
+            os.makedirs(save_dir, exist_ok=True)
+        except OSError as exc:
+            return {"ok": False, "error": f"保存目录不可用：{exc}"}
+        ok, msg = self.manager.start(clean, save_dir)
+        if not ok:
+            return {"ok": False, "error": msg}
+        return {"ok": True, "count": len(clean)}
+
+    def open_url(self, url):
+        url = str(url or "")
+        if not url.startswith(("https://www.xiaohongshu.com", "https://www.rednote.com")):
+            return {"ok": False, "error": "只支持打开小红书链接"}
+        try:
+            os.startfile(url)  # noqa: S606 系统默认浏览器
+            return {"ok": True}
+        except OSError as exc:
+            return {"ok": False, "error": str(exc)}
+
     def start_download(self, text, save_dir=None):
         if self.manager.is_running():
             return {"ok": False, "error": "已有任务在进行中，等它跑完"}

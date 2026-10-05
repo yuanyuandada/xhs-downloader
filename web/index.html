@@ -24,10 +24,18 @@
       </div>
 
       <div class="row actions">
-        <button class="btn primary" id="btnStart">开始下载</button>
+        <button class="btn primary" id="btnPreview">解析预览</button>
         <button class="btn ghost" id="btnOpenFolder">打开文件夹</button>
       </div>
-      <p class="tip">批量下载为防平台限制会自动放慢节奏（几秒一条）；失败的条目不影响其他条。</p>
+      <p class="tip">先解析预览，确认是想要的笔记再下载；批量下载为防平台限制会自动放慢节奏（几秒一条）。</p>
+    </section>
+
+    <section class="card previews" id="previewCard" hidden>
+      <ul id="previewList"></ul>
+      <div class="row dlbar">
+        <button class="btn primary" id="btnStart" disabled>开始下载（0 篇）</button>
+        <span class="tip" id="previewTip"></span>
+      </div>
     </section>
 
     <details class="card adv" id="adv">

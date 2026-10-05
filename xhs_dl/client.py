@@ -373,6 +373,11 @@ def extract_note(url, note_id, html):
     }
 
 
+def thumb_url(token):
+    """预览缩略图（480 宽 jpg，约几十 KB，避免直接加载原图）。"""
+    return f"https://ci.xiaohongshu.com/{token}?imageView2/2/w/480/format/jpg"
+
+
 def fetch_note(url, note_id):
     """完整流程：取页面 → 提取。"""
     html = fetch_note_page(url)
