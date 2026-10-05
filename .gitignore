@@ -1,9 +1,7 @@
 .venv/
 build/
-dist/
 data/
 download/
 test_out/
 __pycache__/
 *.pyc
-installer/小红书下载器安装包.exe
